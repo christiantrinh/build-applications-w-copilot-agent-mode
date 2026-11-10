@@ -55,6 +55,14 @@ describe('OctoFit API contract', () => {
     const member = await User.create({ name: 'Mona', email: 'mona@example.com', fitnessGoal: 'endurance' });
     const invalid = await request(app).post('/api/teams').send({ mascot: 'Mona' });
     expect(invalid.status).toBe(400);
+    const missingMember = await request(app).post('/api/teams').send({
+      name: 'Ghost team',
+      mascot: 'Ghost',
+      members: [new mongoose.Types.ObjectId().toString()],
+    });
+    expect(missingMember.status).toBeGreaterThanOrEqual(400);
+    expect(missingMember.status).toBeLessThan(500);
+    expect(await Team.countDocuments()).toBe(0);
     const created = await request(app).post('/api/teams').send({ name: 'Octocats', mascot: 'Mona', members: [member._id.toString()] });
     expect(created.status).toBe(201);
     expect(created.body.team).toMatchObject({ name: 'Octocats', mascot: 'Mona' });

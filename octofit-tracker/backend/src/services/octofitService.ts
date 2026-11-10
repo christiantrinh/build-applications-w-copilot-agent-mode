@@ -89,6 +89,14 @@ export async function createTeam(input: unknown) {
       })
     : [];
 
+  const uniqueMemberIds = new Set(memberIds.map((memberId) => memberId.toString()));
+  if (uniqueMemberIds.size > 0) {
+    const existingMembers = await User.countDocuments({ _id: { $in: [...uniqueMemberIds] } });
+    if (existingMembers !== uniqueMemberIds.size) {
+      throw validationError('Team member not found', 404);
+    }
+  }
+
   const team = await Team.create({
     name: trimmedName,
     mascot: trimmedMascot,
