@@ -12,7 +12,7 @@ type Props = {
 export function CapabilityCard({ title, description, loading = false, error = null, emptyText, children }: Props) {
   if (loading) {
     return (
-      <section className="card h-100">
+      <section className="card h-100" aria-busy="true">
         <div className="card-body">
           <h2 className="h4">{title}</h2>
           <p>{description}</p>
@@ -24,7 +24,7 @@ export function CapabilityCard({ title, description, loading = false, error = nu
 
   if (error) {
     return (
-      <section className="card h-100">
+      <section className="card h-100" aria-busy="false">
         <div className="card-body">
           <h2 className="h4">{title}</h2>
           <p>{description}</p>
@@ -35,7 +35,7 @@ export function CapabilityCard({ title, description, loading = false, error = nu
   }
 
   return (
-    <section className="card h-100">
+    <section className="card h-100" aria-busy="false">
       <div className="card-body">
         <h2 className="h4">{title}</h2>
         <p>{description}</p>
